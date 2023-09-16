@@ -22,6 +22,7 @@ public class CommandsManager {
     private final YearlyTotal yearlyTotal = new YearlyTotal();
     @Getter
     private final YearlyAverage yearlyAverage = new YearlyAverage();
+    private final Quit quit  = new Quit();
 
     private void registerCommand (Command command) {
         commandList.add(command);
@@ -37,6 +38,7 @@ public class CommandsManager {
         registerCommand(monthlyAverage);
         registerCommand(yearlyAverage);
         registerCommand(yearlyTotal);
+        registerCommand(quit);
         return commandList;
     }
 
@@ -49,6 +51,7 @@ public class CommandsManager {
         options.addOption(monthlyAverage.getOption());
         options.addOption(yearlyAverage.getOption());
         options.addOption(yearlyTotal.getOption());
+        options.addOption(quit.getOption());
         return options;
     }
 
