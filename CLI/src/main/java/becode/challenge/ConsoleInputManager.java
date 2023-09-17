@@ -20,26 +20,26 @@ public class ConsoleInputManager {
 
     private static void handleUserSelection(String selection, CommandsManager commandsManager) {
         switch (selection) {
-            case "h" -> commandsManager.getHelp().execute();
+            case "h"  -> commandsManager.getHelp().execute();
             case "hc" -> commandsManager.getHelpCommand().execute();
 //            case "o" -> commandsManager.getOverview().execute();
 //            case "q" -> commandsManager.getQuit().execute();
             case "ma" -> {
-                String[] paramsArr = paramsSelection();
+                String[] paramsArr = paramsSelection(true);
                 commandsManager.getMonthlyAverage().execute(paramsArr[0], paramsArr[1], paramsArr[2], paramsArr[3], paramsArr[4], paramsArr[5]);
             }
-//                case "mt" -> {
-//                    String[] yearAndMonthSelection = yearAndMonthSelection();
-//                    commandsManager.getMonthlyTotal().execute(yearAndMonthSelection[0], yearAndMonthSelection[1]);
-//                }
-//                case "ya" -> {
-//                    String[] yearAndMonthSelection = yearAndMonthSelection();
-//                    commandsManager.getYearlyAverage().execute(yearAndMonthSelection[0], yearAndMonthSelection[1]);
-//                }
-//                case "yt" -> {
-//                    String[] yearAndMonthSelection = yearAndMonthSelection();
-//                    commandsManager.getYearlyTotal().execute(yearAndMonthSelection[0], yearAndMonthSelection[1]);
-//                }
+            case "mt" -> {
+                String[] paramsArr = paramsSelection(true);
+                commandsManager.getMonthlyTotal().execute(paramsArr[0], paramsArr[1], paramsArr[2], paramsArr[3], paramsArr[4], paramsArr[5]);
+            }
+            case "ya" -> {
+                String[] paramsArr = paramsSelection(false);
+                commandsManager.getYearlyAverage().execute(paramsArr[0], paramsArr[1], paramsArr[2], paramsArr[3], paramsArr[4], paramsArr[5]);
+            }
+                case "yt" -> {
+                    String[] paramsArr = paramsSelection(false);
+                    commandsManager.getYearlyTotal().execute(paramsArr[0], paramsArr[1], paramsArr[2], paramsArr[3], paramsArr[4], paramsArr[5]);
+                }
             default -> {
                 System.out.println("Please select an available command (ex: mt)");
             }
@@ -70,57 +70,63 @@ public class ConsoleInputManager {
         }
     }
 
-    private static String[] paramsSelection() {
-        // Year selection
-        String yearChoice = null;
-        do {
-            System.out.println("Please select a year :");
-            for (Year year : yearList) {
-                System.out.print(year + " ");
-            }
-            yearChoice = scanner.nextLine().trim();
-            try {
-                int yearValue = Integer.parseInt(yearChoice);
-
-                if (!yearList.contains(Year.of(yearValue))) {
-                    System.out.print("Please write a correct year. ");
-                    yearChoice = null;
-                }
-            } catch (NumberFormatException e) {
-                System.out.print("Invalid value, try again. ");
-                yearChoice = null;
-
-            }
-        } while (yearChoice == null);
-
-        // Month selection
-        String monthChoice = null;
-        do {
-            System.out.println("Please select a month :");
-            for (Month month : monthList) {
-                System.out.print(month + " ");
-            }
-            monthChoice = scanner.nextLine().trim().toUpperCase();
-            try {
-                Month selectedMonth = Month.valueOf(monthChoice);
-                if (!monthList.contains(selectedMonth)) {
-                    System.out.print("Please write a correct month. ");
-                    monthChoice = null;
-                }
-            } catch (IllegalArgumentException e) {
-                System.out.print("Invalid value, try again. ");
-                monthChoice = null;
-
-            }
-        } while (monthChoice == null);
+    private static String[] paramsSelection(Boolean includeMonth) {
+        String yearChoice = selectYear();
+        String monthChoice = includeMonth ? selectMonth() : "All";
 
         System.out.println("Do you want to add parameters ? Y/N");
         String moreParamsAnswer = scanner.nextLine().trim().toUpperCase();
+
         if (moreParamsAnswer.equals("Y")) {
             String[] otherOpts = otherOptionsSelection();
             return new String[]{yearChoice, monthChoice, otherOpts[0], otherOpts[1], otherOpts[2], otherOpts[3]};
         }
+
         return new String[]{yearChoice, monthChoice, "All", "All", "All", "$"};
+    }
+
+    private static String selectYear() {
+        while (true) {
+            System.out.println("Please select a year :");
+            for (Year year : yearList) {
+                System.out.print(year + " ");
+            }
+            String yearChoice = scanner.nextLine().trim();
+
+            try {
+                int yearValue = Integer.parseInt(yearChoice);
+
+                if (yearList.contains(Year.of(yearValue))) {
+                    return yearChoice;
+                } else {
+                    System.out.print("Please write a correct year. ");
+                }
+            } catch (NumberFormatException e) {
+                System.out.print("Invalid value, try again. ");
+            }
+        }
+    }
+
+    private static String selectMonth() {
+        while (true) {
+            System.out.println("Please select a month :");
+            for (Month month : monthList) {
+                System.out.print(month + " ");
+            }
+            String monthChoice = scanner.nextLine().trim().toUpperCase();
+
+            try {
+                Month selectedMonth = Month.valueOf(monthChoice);
+
+                if (monthList.contains(selectedMonth)) {
+                    return monthChoice;
+                } else {
+                    System.out.print("Please write a correct month. ");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.print("Invalid value, try again. ");
+            }
+        }
     }
 
     private static String[] otherOptionsSelection() {
