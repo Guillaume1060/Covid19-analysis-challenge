@@ -14,12 +14,10 @@ public class Help implements Command {
 
     @Override
     public void execute() {
-        // @TODO
-        System.out.println("Help!");
-//        CommandManager commandManager = new CommandManager();
-//        Map<String, Command> commands = commandManager.getCommands();
-//        for (var command : commands.entrySet()) {
-//            System.out.println(command.getKey()+" : "+command.getValue().getSmallDescription());
+        CommandsManager commandsManager= new CommandsManager();
+        for (Option opt : commandsManager.getOptions().getOptions()) {
+            System.out.println(opt.getLongOpt() + ": " + opt.getDescription());
+        }
     }
 
 }

@@ -8,7 +8,6 @@ import java.util.List;
 
 public class CommandsManager {
     static List<Command> commandList = new ArrayList<>();
-    private final Options options = new Options();
     // Here instantiation of commands
     @Getter
     private final Help help = new Help();
@@ -22,13 +21,11 @@ public class CommandsManager {
     private final YearlyTotal yearlyTotal = new YearlyTotal();
     @Getter
     private final YearlyAverage yearlyAverage = new YearlyAverage();
-    private final Quit quit  = new Quit();
+    @Getter
+    private final Overview overview = new Overview();
 
     private void registerCommand (Command command) {
         commandList.add(command);
-    }
-    public void executeCommand (Command command) {
-        command.execute();
     }
     public List<Command> getCommands() {
         // Adding Commands to the Map
@@ -38,7 +35,7 @@ public class CommandsManager {
         registerCommand(monthlyAverage);
         registerCommand(yearlyAverage);
         registerCommand(yearlyTotal);
-        registerCommand(quit);
+        registerCommand(overview);
         return commandList;
     }
 
@@ -51,9 +48,7 @@ public class CommandsManager {
         options.addOption(monthlyAverage.getOption());
         options.addOption(yearlyAverage.getOption());
         options.addOption(yearlyTotal.getOption());
-        options.addOption(quit.getOption());
+        options.addOption(overview.getOption());
         return options;
     }
-
-
 }

@@ -1,15 +1,12 @@
 package becode.challenge;
 
-import becode.challenge.commands.Command;
 import becode.challenge.commands.CommandsManager;
 import becode.challenge.commands.OtherOptions;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
-import java.nio.file.Path;
 import java.time.Month;
 import java.time.Year;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -18,12 +15,31 @@ public class ConsoleInputManager {
     private static final Set<Year> yearList = CSVReader.getYearList();
     private static final Set<Month> monthList = CSVReader.getMonthList();
 
+    public static void startProgram(String csvFilePath) {
+        CSVReader csvReader = new CSVReader(csvFilePath);
+            CommandsManager commandsManager = new CommandsManager();
+        while (true) {
+            displayOptions(commandsManager.getOptions());
+            System.out.println("Please select an option:");
+            String answer = scanner.nextLine().trim().toLowerCase();
+            if (answer.equals("q")) {
+                System.out.println("Exiting the program.");
+                break;
+            }
+            handleUserSelection(answer, commandsManager);
+        }
+    }
+
     private static void handleUserSelection(String selection, CommandsManager commandsManager) {
+        String option = "";
+        if (selection.startsWith("hc")) {
+            option = selection.split(" ")[1];
+            selection = selection.split(" ")[0];
+        }
         switch (selection) {
-            case "h"  -> commandsManager.getHelp().execute();
-            case "hc" -> commandsManager.getHelpCommand().execute();
-//            case "o" -> commandsManager.getOverview().execute();
-//            case "q" -> commandsManager.getQuit().execute();
+            case "h" -> commandsManager.getHelp().execute();
+            case "hc" -> commandsManager.getHelpCommand().execute(option);
+            case "o" -> commandsManager.getOverview().execute();
             case "ma" -> {
                 String[] paramsArr = paramsSelection(true);
                 commandsManager.getMonthlyAverage().execute(paramsArr[0], paramsArr[1], paramsArr[2], paramsArr[3], paramsArr[4], paramsArr[5]);
@@ -36,37 +52,20 @@ public class ConsoleInputManager {
                 String[] paramsArr = paramsSelection(false);
                 commandsManager.getYearlyAverage().execute(paramsArr[0], paramsArr[1], paramsArr[2], paramsArr[3], paramsArr[4], paramsArr[5]);
             }
-                case "yt" -> {
-                    String[] paramsArr = paramsSelection(false);
-                    commandsManager.getYearlyTotal().execute(paramsArr[0], paramsArr[1], paramsArr[2], paramsArr[3], paramsArr[4], paramsArr[5]);
-                }
+            case "yt" -> {
+                String[] paramsArr = paramsSelection(false);
+                commandsManager.getYearlyTotal().execute(paramsArr[0], paramsArr[1], paramsArr[2], paramsArr[3], paramsArr[4], paramsArr[5]);
+            }
             default -> {
                 System.out.println("Please select an available command (ex: mt)");
             }
         }
     }
 
-    public static void startProgram() {
-        Path path = Path.of("C:\\Users\\guitc\\OneDrive\\Bureau\\Code\\Java\\covid19-analysis-challenge\\Core\\src\\main\\resources\\covid_and_trace.csv");
-        CSVReader csvReader = new CSVReader("Core/src/main/resources/covid_and_trade.csv");
-
-        boolean endProgram = false;
-        CommandsManager commandsManager = new CommandsManager();
-        List<Command> commandList = commandsManager.getCommands();
-
-        while (!endProgram) {
-            displayOptions(commandsManager.getOptions());
-            System.out.println("Please select an option:");
-            String answer = scanner.nextLine().trim().toLowerCase();
-            if (answer.equals("q")) System.exit(0);
-            handleUserSelection(answer, commandsManager);
-        }
-    }
-
     private static void displayOptions(Options options) {
         System.out.println("Options available:");
         for (Option opt : options.getOptions()) {
-            System.out.println("-" + opt.getOpt() + " (" + opt.getLongOpt() + "): " + opt.getDescription());
+            System.out.println(opt.getOpt() + " (" + opt.getLongOpt() + "): ");
         }
     }
 
@@ -140,7 +139,7 @@ public class ConsoleInputManager {
 
     private static String otherOptionSelection(Set<String> list) {
         Options options = OtherOptions.getOpt(list);
-        String selectedOption = null;
+        String selectedOption;
         while (true) {
             displayOptions(options);
             String userInput = scanner.nextLine().trim();

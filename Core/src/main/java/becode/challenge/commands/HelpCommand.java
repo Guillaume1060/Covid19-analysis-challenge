@@ -3,13 +3,13 @@ package becode.challenge.commands;
 import lombok.Getter;
 import org.apache.commons.cli.Option;
 
+import java.util.Objects;
+
 public class HelpCommand implements Command {
     public final String commandName = "help <Command>";
-    //    private final String commandCall;
-    //    private final Map<String, String> commandDescriptions;
     @Getter
     private final String smallDescription = """
-            returns a full explanation of what the "" does and what parameters it needs.""";
+            returns a full explanation of what the command does and what parameters it needs.Please call it like 'hc commandName'""";
     @Getter
     private final Option option = Option.builder("hc")
             .longOpt("help_command")
@@ -17,20 +17,17 @@ public class HelpCommand implements Command {
             .desc(smallDescription)
             .build();
 
-
-//    public HelpCommand(String commandCall, Map<String, String> commandDescriptions) {
-//        this.commandCall = commandCall;
-//        this.commandDescriptions = commandDescriptions;
-//    }
-
     @Override
     public void execute() {
-        // Vérifiez si la commande spécifiée existe dans la carte
-        //        if (commandDescriptions.containsKey(commandCall)) {
-        //            String description = commandDescriptions.get(commandName);
-        //            System.out.println(description);
-        //        } else {
-        //            System.out.println("Command not found: " + commandCall);
-        //        }
+
+    }
+
+    public void execute(String option) {
+        CommandsManager commandsManager = new CommandsManager();
+        for (Option opt : commandsManager.getOptions().getOptions()) {
+            if (Objects.equals(option, opt.getLongOpt())) {
+                System.out.println(opt.getLongOpt() + ": " + opt.getDescription());
+            }
+        }
     }
 }
