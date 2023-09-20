@@ -12,13 +12,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Getter
 public class MonthlyTotal implements Command {
-    @Getter
     private final String name = "monthly_total";
-    @Getter
     private final String smallDescription = """
             returns the sum of both the export and import for a specified month of a specified year.""";
-    @Getter
     private final Option option = Option.builder("mt")
             .longOpt("monthly_total")
             .hasArg()

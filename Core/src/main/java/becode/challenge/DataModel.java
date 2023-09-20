@@ -5,18 +5,19 @@ import lombok.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Year;
+@Getter
 @Data
 @AllArgsConstructor
 @ToString
 public class DataModel {
-    @Getter private final String direction;
-    @Getter private final Year year;
-    @Getter private final LocalDate date;
-    @Getter private final DayOfWeek weekDay;
-    @Getter private final String country;
-    @Getter private final String commodity;
-    @Getter private final String transportMode;
-    @Getter @Setter private String measure;
-    @Getter @Setter private Long value;
-    @Getter @Setter private Long cumulative;
+    private final String direction;
+    private final Year year;
+    private final LocalDate date;
+    private final DayOfWeek weekDay;
+    private final String country;
+    private final String commodity;
+    private final String transportMode;
+    @Setter private String measure;
+    @Setter private Long value;
+    @Setter private Long cumulative;
 }

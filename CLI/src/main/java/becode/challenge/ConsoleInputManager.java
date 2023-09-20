@@ -17,9 +17,9 @@ public class ConsoleInputManager {
 
     public static void startProgram(String csvFilePath) {
         CSVReader csvReader = new CSVReader(csvFilePath);
-            CommandsManager commandsManager = new CommandsManager();
+        CommandsManager commandsManager = new CommandsManager();
         while (true) {
-            displayOptions(commandsManager.getOptions());
+            displayOptions(commandsManager.getOptions(),false);
             System.out.println("Please select an option:");
             String answer = scanner.nextLine().trim().toLowerCase();
             if (answer.equals("q")) {
@@ -33,8 +33,14 @@ public class ConsoleInputManager {
     private static void handleUserSelection(String selection, CommandsManager commandsManager) {
         String option = "";
         if (selection.startsWith("hc")) {
-            option = selection.split(" ")[1];
-            selection = selection.split(" ")[0];
+            String[] splitResult = selection.split(" ");
+            if (splitResult.length >= 2) {
+                option = splitResult[1];
+                selection = splitResult[0];
+            } else {
+                System.out.println("Add the command after hc (ex: hc monthly_average)");
+                selection = "badCommand";
+            }
         }
         switch (selection) {
             case "h" -> commandsManager.getHelp().execute();
@@ -62,10 +68,10 @@ public class ConsoleInputManager {
         }
     }
 
-    private static void displayOptions(Options options) {
+    private static void displayOptions(Options options, boolean withDescription) {
         System.out.println("Options available:");
         for (Option opt : options.getOptions()) {
-            System.out.println(opt.getOpt() + " (" + opt.getLongOpt() + "): ");
+            System.out.println(opt.getOpt() + " (" + opt.getLongOpt() + "): "+ (withDescription ? opt.getDescription():""));
         }
     }
 
@@ -141,7 +147,7 @@ public class ConsoleInputManager {
         Options options = OtherOptions.getOpt(list);
         String selectedOption;
         while (true) {
-            displayOptions(options);
+            displayOptions(options, true);
             String userInput = scanner.nextLine().trim();
 
             if (options.hasOption(userInput)) {

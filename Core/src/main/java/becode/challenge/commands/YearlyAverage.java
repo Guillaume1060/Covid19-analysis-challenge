@@ -12,13 +12,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Getter
 public class YearlyAverage implements Command {
-    @Getter
     private final String name = "yearly_average";
-    @Getter
     private final String smallDescription = """
             returns an overview of all the monthly averages for a particular year, for both import and export. Then it gives the yearly average for both import and export.""";
-    @Getter
     private final Option option = Option.builder("ya")
             .longOpt("yearly_average")
             .hasArg()

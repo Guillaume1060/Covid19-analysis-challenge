@@ -8,7 +8,7 @@
   <packaging>pom</packaging>
 
   <name>covid19-analysis</name>
-  <url>http://maven.apache.org</url>
+  <url>https://maven.apache.org</url>
   <modules>
     <module>Core</module>
     <module>CLI</module>

@@ -12,13 +12,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Getter
 public class MonthlyAverage implements Command {
-    @Getter
     private final String name = "monthly_average";
-    @Getter
     private final String smallDescription = """
             returns the average of both the export and the import of a specified month of a specified year.""";
-    @Getter
     private final Option option = Option.builder("ma")
             .longOpt("monthly_average")
             .hasArg()

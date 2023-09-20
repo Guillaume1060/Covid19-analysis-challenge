@@ -6,22 +6,16 @@ import org.apache.commons.cli.Options;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class CommandsManager {
     static List<Command> commandList = new ArrayList<>();
     // Here instantiation of commands
-    @Getter
     private final Help help = new Help();
-    @Getter
     private final HelpCommand helpCommand = new HelpCommand();
-    @Getter
     private final MonthlyTotal monthlyTotal = new MonthlyTotal();
-    @Getter
     private final MonthlyAverage monthlyAverage = new MonthlyAverage();
-    @Getter
     private final YearlyTotal yearlyTotal = new YearlyTotal();
-    @Getter
     private final YearlyAverage yearlyAverage = new YearlyAverage();
-    @Getter
     private final Overview overview = new Overview();
 
     private void registerCommand (Command command) {

@@ -3,13 +3,11 @@ package becode.challenge.commands;
 import lombok.Getter;
 import org.apache.commons.cli.Option;
 
+@Getter
 public class Help implements Command {
-    @Getter
     private final String commandName = "help";
-    @Getter
     private final String smallDescription = """
             returns a list of available commands with a small description.""";
-    @Getter
     private final Option option = new Option("h", "help", false, smallDescription);
 
     @Override
